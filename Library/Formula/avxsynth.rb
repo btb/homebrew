@@ -8,7 +8,7 @@ class Avxsynth < Formula
 
   depends_on 'log4cpp'
   depends_on :x11
-  #depends_on 'pango'
+  depends_on 'pango'
   #depends_on 'cairo'
   depends_on 'fontconfig'
   depends_on 'freetype'
@@ -16,7 +16,7 @@ class Avxsynth < Formula
 
   def install
       system "autoreconf -i"
-      system './configure'
+      system './configure', "--prefix=#{prefix}"
       system "make"
       system "make install"
   end
@@ -115,3 +115,45 @@ index 17e2c45..0ef76eb 100644
  
  namespace avxsynth{  
      
+diff --git a/avxsynth/builtinfunctions/src/filters/transform.cpp b/avxsynth/builtinfunctions/src/filters/transform.cpp
+index 50b6e76..4886cc0 100644
+--- a/avxsynth/builtinfunctions/src/filters/transform.cpp
++++ b/avxsynth/builtinfunctions/src/filters/transform.cpp
+@@ -410,15 +410,15 @@ PVideoFrame AddBorders::GetFrame(int n, IScriptEnvironment* env)
+ 
+     BitBlt(dstp+initial_black, dst_pitch, srcp, src_pitch, src_row_size, src_height);
+     for (int a=0; a<initial_black; a += 4)
+-      *(unsigned __int32*)(dstp+a) = black;
++      *(uint32_t*)(dstp+a) = black;
+     dstp += initial_black + src_row_size;
+     for (int y=src_height-1; y>0; --y) {
+       for (int b=0; b<middle_black; b += 4)
+-        *(unsigned __int32*)(dstp+b) = black;
++        *(uint32_t*)(dstp+b) = black;
+       dstp += dst_pitch;
+     }
+     for (int c=0; c<final_black; c += 4)
+-      *(unsigned __int32*)(dstp+c) = black;
++      *(uint32_t*)(dstp+c) = black;
+   }
+   else if (vi.IsRGB24()) {
+     const int ofs = dst_pitch - dst_row_size;
+@@ -446,15 +446,15 @@ PVideoFrame AddBorders::GetFrame(int n, IScriptEnvironment* env)
+   else {
+     BitBlt(dstp+initial_black, dst_pitch, srcp, src_pitch, src_row_size, src_height);
+     for (int i=0; i<initial_black; i+=4)
+-      *(unsigned __int32*)(dstp+i) = clr;
++      *(uint32_t*)(dstp+i) = clr;
+     dstp += initial_black + src_row_size;
+     for (int y=src_height-1; y>0; --y) {
+       for (int i=0; i<middle_black; i+=4)
+-        *(unsigned __int32*)(dstp+i) = clr;
++        *(uint32_t*)(dstp+i) = clr;
+       dstp += dst_pitch;
+     } // for y
+     for (int i=0; i<final_black; i+=4)
+-      *(unsigned __int32*)(dstp+i) = clr;
++      *(uint32_t*)(dstp+i) = clr;
+   } // end else
+   return dst;
+ }
