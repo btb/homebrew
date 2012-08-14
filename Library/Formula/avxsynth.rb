@@ -13,6 +13,7 @@ class Avxsynth < Formula
   depends_on 'fontconfig'
   depends_on 'freetype'
   depends_on 'libpng'
+  depends_on 'qt'
 
   def install
       system "autoreconf -i"
@@ -157,3 +158,44 @@ index 50b6e76..4886cc0 100644
    } // end else
    return dst;
  }
+diff --git a/configure.ac b/configure.ac
+index 9d27183..150f67a 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -388,7 +388,8 @@ EOF
+           #include <QApplication>
+         ],
+         [
+-          QApplication app(0, 0);
++          int argc=0;
++          QApplication app(argc, 0);
+           Test t;
+           QObject::connect(&t, SIGNAL(send()), &t, SLOT(receive()));
+         ]
+diff --git a/apps/AVXEdit/Makefile.am b/apps/AVXEdit/Makefile.am
+index 922da20..e55e20d 100644
+--- a/apps/AVXEdit/Makefile.am
++++ b/apps/AVXEdit/Makefile.am
+@@ -57,4 +57,4 @@ src/qrc_application.cpp: application.qrc \
+ 	$(rcc_verbose)$(RCC) -name application $(srcdir)/application.qrc -o src/qrc_application.cpp
+ 
+ src/moc_mainwindow.cpp: $(srcdir)/src/mainwindow.h
+-	$(moc_verbose)$(MOC) $(AVXEdit_CPPFLAGS) $(CPPFLAGS) $< -o $@
++	$(moc_verbose)$(MOC) $(AVXEdit_CPPFLAGS) $< -o $@
+diff --git a/apps/avxframeserver/frameserverlib/src/avxSynthAppInterface.cpp b/apps/avxframeserver/frameserverlib/src/avxSynthAppInterface.cpp
+index abce7b0..f0c432b 100644
+--- a/apps/avxframeserver/frameserverlib/src/avxSynthAppInterface.cpp
++++ b/apps/avxframeserver/frameserverlib/src/avxSynthAppInterface.cpp
+@@ -647,10 +647,10 @@ extern int ProcessScript(const char *scriptName, bool isMPlayerLaunchRequired)
+           AVXLOG_INFO("Processing script %s:", scriptName);
+           printScript(scriptName);
+           
+-          hAvxSynth = dlopen("libavxsynth.so", RTLD_NOW | RTLD_GLOBAL);
++          hAvxSynth = dlopen("libavxsynth.dylib", RTLD_NOW | RTLD_GLOBAL);
+           if(NULL == hAvxSynth)
+           {
+-              AVXLOG_ERROR("%s", "Failed loading libavxsynth.so");
++              AVXLOG_ERROR("%s", "Failed loading libavxsynth.dylib");
+               AVXLOG_ERROR("Error: %s", dlerror());
+               return -1;
+           }
