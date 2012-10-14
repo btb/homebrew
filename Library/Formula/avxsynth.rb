@@ -1,11 +1,15 @@
 require 'formula'
 
 class Avxsynth < Formula
-  homepage ''
-  version '4.0'
-  url 'https://github.com/avxsynth/avxsynth/tarball/master'
-  sha1 '8238853d3ac1511f8a9fe425cc4b1abd95a43122'
+  homepage 'https://github.com/avxsynth/avxsynth/wiki'
+  #version '4.0'
+  #url 'https://github.com/avxsynth/avxsynth/tarball/master'
+  #sha1 '8238853d3ac1511f8a9fe425cc4b1abd95a43122'
 
+  head 'https://github.com/avxsynth/avxsynth.git'
+
+  depends_on 'automake'
+  depends_on 'libtool'
   depends_on 'log4cpp'
   depends_on :x11
   depends_on 'pango'
@@ -38,12 +42,11 @@ diff --git a/avxsynth/common/include/stdafx.h b/avxsynth/common/include/stdafx.h
 index cf4fe7f..065fab8 100644
 --- a/avxsynth/common/include/stdafx.h
 +++ b/avxsynth/common/include/stdafx.h
-@@ -5,7 +5,7 @@
+@@ -5,7 +5,6 @@
  #include <stdio.h>
  #include <stdlib.h>
  #include <math.h>
 -#include <malloc.h>
-+#include <sys/malloc.h>
  #include <string.h>
  //#include <io.h>
  #include <ctype.h>
@@ -95,12 +98,11 @@ diff --git a/avxsynth/core/src/core/main.cpp b/avxsynth/core/src/core/main.cpp
 index 5867e05..379c101 100644
 --- a/avxsynth/core/src/core/main.cpp
 +++ b/avxsynth/core/src/core/main.cpp
-@@ -39,7 +39,7 @@
+@@ -39,7 +39,6 @@
  #define FP_STATE 0x9001f
  
  #include <stdio.h>
 -#include <malloc.h>
-+#include <sys/malloc.h>
  #include <limits.h>
  #include <math.h>
  #include <cstdarg>
@@ -199,3 +201,19 @@ index abce7b0..f0c432b 100644
                AVXLOG_ERROR("Error: %s", dlerror());
                return -1;
            }
+diff --git a/avxsynth/core/src/core/plugins.cpp b/avxsynth/core/src/core/plugins.cpp
+index e2ec50d..7abdbdc 100644
+--- a/avxsynth/core/src/core/plugins.cpp
++++ b/avxsynth/core/src/core/plugins.cpp
+@@ -75,9 +75,9 @@ void FreeLibraries(void* loaded_plugins, IScriptEnvironment* env) {
+ 
+ static bool IdentifiedLibAvxsynthDuplicate(const char* filename)
+ {    
+-    std::string strCommand          = "nm -CD ";
++    std::string strCommand          = "nm ";
+     std::string strFilename         = std::string("\"") + std::string(filename) + std::string("\"");
+-    std::string strDiscriminator    = "avxsynth::CAVIFileSynth::DelayInit";
++    std::string strDiscriminator    = "avxsynth.*CAVIFileSynth.*DelayInit";
+     std::string strGrepAfter        = std::string(" | grep \"") + strDiscriminator + std::string("\"");
+     std::string strCompleteCommand = strCommand + strFilename + strGrepAfter;
+     
