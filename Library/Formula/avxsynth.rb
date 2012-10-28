@@ -22,7 +22,7 @@ class Avxsynth < Formula
   def install
       system "autoreconf -i"
       system './configure', "--prefix=#{prefix}"
-      system "make"
+      system "make", 'pkglibdir=/usr/local/lib/avxsynth'
       system "make install"
   end
 
