@@ -42,7 +42,7 @@ index 0000000..29a50ad
 +
 +include_directories(${AVXSYNTH_INCLUDEDIR})
 +
-+add_library(DePan SHARED compensate.cpp depanio.cpp info.cpp interface.cpp interpolate.cpp scenes.cpp stabilize.cpp transform.cpp)
++add_library(DePan MODULE compensate.cpp depanio.cpp info.cpp interface.cpp interpolate.cpp scenes.cpp stabilize.cpp transform.cpp)
 +
 +INSTALL(TARGETS DePan LIBRARY DESTINATION lib/avxsynth)
 diff --git a/avisynth.h b/avisynth.h
